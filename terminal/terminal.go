@@ -1,6 +1,7 @@
 package terminal
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"log"
@@ -140,6 +141,36 @@ func GetWindowSize() (rows int, cols int, err error) {
 	return int(winSize.Row), int(winSize.Col), nil
 }
 
+func MakeGrid() []*bytes.Buffer {
+	colLength := screen.S.Cols / 7
+	rowLength := screen.S.Rows / 3
+	var b []byte
+	var line []byte
+	var a []*bytes.Buffer
+
+	for i := 0; i < screen.S.Cols; i++ {
+		line = append(line, '-')
+		if i % colLength == 0 {
+			b = append(b, '|')
+		} else {
+			b = append(b, ' ')
+		}
+	}
+
+	buf := bytes.NewBuffer(b)
+	bufLine := bytes.NewBuffer(line)
+
+	for j := 0; j < screen.S.Rows; j++ {
+		if j % rowLength == 0 {
+			a = append(a, bufLine)
+		} else {
+			a = append(a, buf)
+		}
+	}
+
+	return a
+}
+
 func InitEditor() {
 	screen.S.Cx = 0
 	screen.S.Cy = 0
@@ -149,5 +180,6 @@ func InitEditor() {
 	}
 	screen.S.Rows = rows
 	screen.S.Cols = cols
+	screen.S.GridRows = MakeGrid()
 }
 

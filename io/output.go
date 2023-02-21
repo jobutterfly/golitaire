@@ -9,6 +9,9 @@ import (
 
 func DrawRows(buf *bytes.Buffer) error {
 	for i := 0; i < screen.S.Rows; i++ {
+		if _, err := buf.Write(screen.S.GridRows[i].Bytes()); err != nil {
+			return err
+		}
 		if _, err := buf.Write([]byte("\x1b[K")); err != nil {
 			return err
 		}

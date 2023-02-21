@@ -1,6 +1,8 @@
 package screen
 
 import (
+	"bytes"
+
 	"golang.org/x/term"
 )
 
@@ -11,6 +13,7 @@ type Screen struct {
 	Cy        int
 	Termios   *term.State
 	QuitTimes int
+	GridRows  []*bytes.Buffer
 }
 
 var S Screen
